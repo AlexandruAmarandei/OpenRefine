@@ -43,13 +43,33 @@ Refine.DefaultImportingController.sources.push({
 ThisComputerImportingSourceUI.prototype.attachUI = function(bodyDiv) {
   var self = this;
 
+	
   bodyDiv.html(DOM.loadHTML("core", "scripts/index/default-importing-sources/import-from-computer-form.html"));
 
   this._elmts = DOM.bind(bodyDiv);
-  
+
   $('#or-import-locate-files').text($.i18n._('core-index-import')["locate-files"]);
+
+  document.getElementById('loadFile').value = $.i18n._('core-index-import')["select-file"];
+  var divOfFileNames = document.getElementById('filesSelectedPar');
+  var newPar = document.createElement("P");
+  var newText = document.createTextNode($.i18n._('core-index-import')["select-file"]);
+  newPar.appendChild(newText);
+  divOfFileNames.appendChild(newPar);
+
+  $("input[type=file]").on('change',function() {
+  if (self._elmts.fileInput[0].files.length === 0) {
+    newText.nodeValue =$.i18n._('core-index-import')["select-file"];
+  } else {
+     var fileNames = "";
+     for(var i=0; i<self._elmts.fileInput[0].files.length;i++){
+	fileNames += self._elmts.fileInput[0].files.item(i).name + " ";
+     }
+     newText.nodeValue = fileNames;
+    }
+});	
+
   this._elmts.nextButton.html($.i18n._('core-buttons')["next"]);
-  
   this._elmts.nextButton.click(function(evt) {
     if (self._elmts.fileInput[0].files.length === 0) {
       window.alert($.i18n._('core-index-import')["warning-data-file"]);
